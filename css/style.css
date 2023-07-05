@@ -12,7 +12,7 @@ a {
     max-width: 1220px;
 }
 .nav {
-    background: url(/task2_8/img/header.png) no-repeat;
+    background: url(/img/header.png) no-repeat;
     background-size: cover;
     min-height: 100vh;
     background-position: center;
