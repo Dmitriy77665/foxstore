@@ -1,4 +1,4 @@
-import { reloadCard } from "./basket.js"
+import { listCards, reloadCard} from './basket.js'
 const products = [
     {
         id:'1',
@@ -59,8 +59,7 @@ const products = [
 ]
 
 const catalog = document.querySelector('.catalog')
-
-export function innitApp () {
+function innitApp () {
     products.forEach((value, key) => {
         let newDiv = document.createElement('ul')
         newDiv.classList.add('catalog_item')
@@ -77,20 +76,14 @@ export function innitApp () {
         catalog.insertBefore(newDiv, catalog.firstChild)
     })
 }
-innitApp ()
-export function addToCard(key) {
+innitApp()
+
+function addToCard(key) {
     if(listCards[key] == null) {
         listCards[key] = products[key]
         listCards[key].quantity = 1
     }
     reloadCard()
 }
-export function changeQuantity (key, quantity) {
-    if(quantity == 0) {
-        delete listCards[key]
-    } else {
-        listCards[key].quantity = quantity
-        listCards[key].price = quantity * products[key].price
-    }
-    reloadCard()
-}
+
+
