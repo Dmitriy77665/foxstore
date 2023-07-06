@@ -1,3 +1,5 @@
+import {products} from "./products.js"
+
 const body = document.querySelector('body')
 const openBasket = document.querySelector('.open_basket')
 const closeBasket = document.querySelector('.close_basket')
@@ -34,9 +36,9 @@ export function reloadCard() {
                 </div>
                 <div class="amount">
                     <div class="amount_item">
-                        <button onclick="changeQuantity(${key}, ${value.quantity - 1})">-</button>
+                        <button class="btn_minus">-</button>
                         <span>${value.quantity}</span>
-                        <button onclick="changeQuantity(${key}, ${value.quantity + 1})">+</button>
+                        <button class="btn_plus">+</button>
                     </div>
                     <div class ="amount_remove">
                         <p>Remove</p>
@@ -46,12 +48,16 @@ export function reloadCard() {
             `
             listCard.appendChild(newDiv)
         }
+        const btnMinus = document.querySelector('.btn_minus')
+        const btnPlus = document.querySelector('.btn_plus')
+        btnMinus.addEventListener('click', () => changeQuantity(key, value.quantity -1))
+        btnPlus.addEventListener('click', () => changeQuantity(key, value.quantity +1))
     })
     total.innerText = totalPrice.toString()
     quantity.innerText = count
 }
 
-function changeQuantity (key, quantity) {
+function changeQuantity(key, quantity) {
     if(quantity == 0) {
         delete listCards[key]
     } else {
@@ -60,3 +66,4 @@ function changeQuantity (key, quantity) {
     }
     reloadCard()
 }
+

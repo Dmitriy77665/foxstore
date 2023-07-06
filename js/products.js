@@ -1,5 +1,5 @@
 import { listCards, reloadCard} from './basket.js'
-const products = [
+export const products = [
     {
         id:'1',
         img:'img/catalog/1.png',
@@ -59,13 +59,14 @@ const products = [
 ]
 
 const catalog = document.querySelector('.catalog')
+
 function innitApp () {
     products.forEach((value, key) => {
         let newDiv = document.createElement('ul')
         newDiv.classList.add('catalog_item')
         newDiv.innerHTML = `
             <li><img src="${value.img}" alt=""></li>
-            <li><button onclick="addToCard(${key})" class="btn_add"><span>+</span><p>Add</p></button></li>
+            <li><button class="btn_add"><span>+</span><p>Add</p></button></li>
             <li class="item_price">
                 <p>${value.name}</p>
                 <span>$${value.price.toString()}</span>
@@ -74,16 +75,21 @@ function innitApp () {
             </li>
         `
         catalog.insertBefore(newDiv, catalog.firstChild)
+        const btnAdd = document.querySelector('.btn_add')
+        btnAdd.addEventListener('click', () => {
+        if(listCards[key] == null) {
+            listCards[key] = products[key]
+            listCards[key].quantity = 1
+        }
+        reloadCard()
     })
+    })
+    
 }
 innitApp()
 
-function addToCard(key) {
-    if(listCards[key] == null) {
-        listCards[key] = products[key]
-        listCards[key].quantity = 1
-    }
-    reloadCard()
-}
+
+
+
 
 
