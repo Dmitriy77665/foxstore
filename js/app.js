@@ -116,7 +116,7 @@ function reloadCard() {
                     <div><img class="img_item" src="${value.img}"></div>
                     <div class = "cards_txt">
                         <p>${value.name}</p>
-                        <span>${value.price.toString()}</span>
+                        <span>${value.price}</span>
                     </div>
                 </div>
                 <div class="amount">
@@ -143,8 +143,9 @@ function changeQuantity (key, quantity) {
         delete listCards[key]
     } else {
         listCards[key].quantity = quantity
-        listCards[key].price = quantity * products[key].price
+        listCards[key].price[key] = quantity * products[key].price
     }
     reloadCard()
 }
+
 

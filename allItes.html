@@ -14,8 +14,8 @@
                     <a href="/index.html"><img src="/img/our_history/logo_2.png" alt=""></a>
                 </div>
                 <div class="nav_menu">
-                    <ul>
-                        <li><a href="">Shop</a></li>
+                    <ul class="nav_menu_item">
+                        <li><a href="/index.html">Shop</a></li>
                         <li><a href="">Mainpage</a></li>
                         <li><a href="/ourHistory.html">Our history</a></li>
                         <li><a href="/allItes.html">All ites</a></li>
@@ -50,18 +50,19 @@
         <div class="container">
             <div class="main_item">
                 <div class="sidebar">
-                    <input type="search" placeholder="Search">
+                    <input id="search" type="search" placeholder="Search">
                     <p>Topic</p>
                     <ul class="list">
-                        <li class="list_item"><button data-id="all">All</button></li>
-                        <li class="list_item"><button data-id="forest">Forest</button></li>
-                        <li class="list_item"><button data-id="fox kids">Fox kids</button></li>
-                        <li class="list_item"><button data-id="other">Other</button></li>
+                        <li class="list_item"><button class="btn" data-filter="all">All</button></li>
+                        <li class="list_item"><button class="btn btn_forest" data-filter="Forest">Forest</button></li>
+                        <li class="list_item"><button class="btn btn_foxkids" data-filter="Foxkid">Foxs kids</button></li>
+                        <li class="list_item"><button class="btn btn_other" data-filter="Other">Other</button></li>
                     </ul>
                     <p>Price</p>
-                    <input class ="range" type="range">
+                    <input class ="slide" type="range" min="1" max="200" value="1">
+                    <div class="progress"></div>
                     <div class="value">
-                        <p>Value: <span>$80</span></p>
+                        <p>Value: $<span id="price">80</span></p>
                     </div>
                     
                 </div>
@@ -123,8 +124,7 @@
         </div>
     </div>
     
-    <script type="module" src="/js/products.js"></script>
-    <script type="module" src="/js/basket.js"></script>
-    <script type="module" src="/js/filters.js"></script>
+    <script src="/js/main.js"></script>
+</body>
 </body>
 </html>
