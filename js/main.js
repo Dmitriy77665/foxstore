@@ -114,12 +114,20 @@ filterProduct(btn)
 const inpRange = document.querySelector('.slide')
 const valuePrice = document.getElementById('price')
 
-function filterByPrice (price) {
+inpRange.addEventListener('input', (event) => {
+    price.innerHTML = '1'
     price.innerHTML = inpRange.value
     inpRange.oninput = function() {
         price.innerHTML = inpRange.value
     }
-}
+    
+    let productsFilter = newProducts.filter(item => (item.price >= inpRange.value))
+        if(productsFilter.length !== 0) {
+            catalogItem.innerHTML = ''
+            catalogItem.innerHTML = createProductCard(productsFilter)
+        }
+        
+    
+})
 
-filterByPrice(valuePrice)
 
