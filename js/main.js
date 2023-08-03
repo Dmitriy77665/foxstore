@@ -56,6 +56,7 @@ const products = [
         topic: 'Foxkid'
     },
 ]
+let newProducts = JSON.parse(JSON.stringify(products))
 
 const catalog = document.querySelector('.catalog')
 let card = ''
@@ -77,25 +78,22 @@ function createProductCard (arr) {
 
 let catalogItem = document.createElement('div')
 catalogItem.classList.add('catalog_item')
-catalogItem.innerHTML = createProductCard(products)
+catalogItem.innerHTML = createProductCard(newProducts)
 catalog.prepend(catalogItem)
 
 
-
-
-let newProducts = JSON.parse(JSON.stringify(products))
-    
-
 const item = document.querySelectorAll('.item')
-
 const btn = document.querySelectorAll('.btn')
+
 function filterProduct (obj) {
     for(let i = 0; i < obj.length; i++) {
         obj[i].addEventListener('click', (event) => {
             event.preventDefault()
+            
             let filterClass = event.target.dataset.filter
             
             item.forEach(elem => {
+                
                 if(filterClass == 'all') {
                     elem.style.display = 'block'
                 } else {
@@ -108,26 +106,29 @@ function filterProduct (obj) {
             })
         })
     }
+    const inpRange = document.querySelector('.slide')
+    inpRange.addEventListener('input', (event) => {
+        event.preventDefault()
+        price.innerHTML = '1'
+        
+        price.innerHTML = inpRange.value
+        inpRange.oninput = function() {
+            price.innerHTML = inpRange.value
+        }
+        let productsFilter = newProducts.filter(item => (Number(inpRange.value) >= Number(item.price)))
+        catalogItem.innerHTML = ''
+        if(productsFilter.length !== 0) {
+            catalog.innerHTML = createProductCard(productsFilter)
+            console.log(catalog)
+        }
+        
+        
+            
+    })
+        
 }
 filterProduct(btn)
 
-const inpRange = document.querySelector('.slide')
-const valuePrice = document.getElementById('price')
 
-inpRange.addEventListener('input', (event) => {
-    price.innerHTML = '1'
-    price.innerHTML = inpRange.value
-    inpRange.oninput = function() {
-        price.innerHTML = inpRange.value
-    }
-    
-    let productsFilter = newProducts.filter(item => (item.price >= inpRange.value))
-        if(productsFilter.length !== 0) {
-            catalogItem.innerHTML = ''
-            catalogItem.innerHTML = createProductCard(productsFilter)
-        }
-        
-    
-})
 
 
