@@ -57,12 +57,12 @@ const products = [
   },
 ]
 
-let newProducts = JSON.parse(JSON.stringify(products));
+let newProducts = JSON.parse(JSON.stringify(products))
 
-const catalog = document.querySelector('.catalog');
+const catalog = document.querySelector('.catalog')
 
-function createProduct(productsToShow) {
-  let card = ''; // Переменная для хранения карточек продуктов
+function createProduct(productsItem) {
+  let card = ''; 
 
   function createProductCard(arr) {
     arr.forEach((product) => {
@@ -79,13 +79,17 @@ function createProduct(productsToShow) {
     });
   }
 
-  createProductCard(productsToShow); // Вызываем функцию для создания карточек
+  createProductCard(productsItem); 
 
-  catalog.innerHTML = ''; // Очищаем каталог перед добавлением новых карточек
+  catalog.innerHTML = ''; 
   let catalogItem = document.createElement('div');
   catalogItem.classList.add('catalog_item');
-  catalogItem.innerHTML = card; // Присваиваем карточки к контейнеру
-  catalog.prepend(catalogItem); // Добавляем контейнер в каталог
+  catalogItem.innerHTML = card; 
+  catalog.append(catalogItem);
+  const allFoxes = document.createElement('button')
+  allFoxes.textContent = 'All Foxes'
+  allFoxes.classList.add('all_foxes')
+  catalog.append(allFoxes)
 
   const btnAddBasket = document.querySelectorAll('.btn_add');
   btnAddBasket.forEach((btn) => {
@@ -106,14 +110,9 @@ let basket = [];
 function addToBasket(product) {
   basket.push(product);
   createBasket(basket);
-  updateTotalPrice();
+  calcBasketPrice();
 }
 
-function updateTotalPrice() {
-  const totalSpan = document.querySelector('.total');
-  const total = basket.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-  totalSpan.textContent = total.toFixed(2);
-}
 
 function createBasket(item) {
   const listCard = document.querySelector('.list_card');
@@ -128,30 +127,68 @@ function createBasket(item) {
               <li><img class="img_item" src="${product.img}"></li>
               <li class="cards_txt">
                   <p>${product.name}</p>
-                  <span>${product.price}</span>
+                  <span class="price_currency">${product.price}</span>
               </li>
           </ul>
           <ul class="amount">
               <li class="amount_item">
-                  <button class ="btn_minus">-</button>
-                  <span id="count"></span>
-                  <button class ="btn_plus">+</button>
+                  <button class ="btn_minus" data-action="minus">-</button>
+                  <span id="count" data-counter>1</span>
+                  <button class ="btn_plus" data-action="plus">+</button>
               </li>
               <li class="amount_remove">
                   <p>Remove</p>
-                  <button class="btn_remove" data-product-id="${product.id}"><img src="/img/basket/close-circle.png"></button>
+                  <button class="btn_remove" ><img data-action="remove" src="/img/basket/close-circle.png"></button>
               </li>
           </ul>
         </div>`;
     });
     listCard.innerHTML = card;
-    bindRemoveButton();
-  }
 
+  }
   createBasketProduct(item);
 }
 
+window.addEventListener('click', (event) => {
+  let counter;
+  let cards;
+  if (event.target.dataset.action === 'plus' || event.target.dataset.action === 'minus') {
+    cards = event.target.closest('.cards');
+    counter = cards.querySelector('[data-counter]');
+    const priceEl = cards.querySelector('.price_currency');
+    const productPrice = parseFloat(priceEl.innerText);
+    const currentCount = parseInt(counter.innerText);
+    let newCount;
+    if (event.target.dataset.action === 'plus') {
+      newCount = currentCount + 1;
+    } else if (event.target.dataset.action === 'minus' && currentCount > 1) {
+      newCount = currentCount - 1;
+    } else {
+      return;
+    }
 
+    counter.innerText = newCount;
+    priceEl.textContent = (productPrice * newCount).toFixed(2);
+
+  } else if (event.target.dataset.action === 'remove') {
+    cards = event.target.closest('.cards');
+    cards.remove();
+  }
+  calcBasketPrice();
+});
+
+function calcBasketPrice() {
+  const cards = document.querySelectorAll('.cards');
+  let totalPrice = 0;
+  cards.forEach(function (item) {
+    const amountEl = item.querySelector('[data-counter]');
+    const priceEl = item.querySelector('.price_currency');
+    const currentPrice = parseFloat(amountEl.innerText) * parseFloat(priceEl.innerText);
+    totalPrice += currentPrice;
+  });
+  const totalSpan = document.querySelector('.total');
+  totalSpan.textContent = totalPrice.toFixed(2);
+}
 function filterProduct() {
   const btn = document.querySelectorAll('.btn');
   btn.forEach((button) => {
@@ -170,17 +207,14 @@ function filterProduct() {
     });
   });
 }
-
 function filterProductPrice() {
-  
   const inpRange = document.querySelector('.slide');
-  price.innerHTML = '1'
-  inpRange.oninput = function() {
-          
+  price.innerHTML = '200'
+  inpRange.oninput = function() {    
       price.innerHTML = inpRange.value
   }
   inpRange.addEventListener('input', () => {
-    let productsFilter = newProducts.filter((item) => parseFloat(inpRange.value) >= parseFloat(item.price));
+    let productsFilter = newProducts.filter((item) => parseFloat(item.price) <= parseFloat(inpRange.value));
     createProduct(productsFilter);
   });
 }
