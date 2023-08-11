@@ -16,6 +16,9 @@ export function filterProduct() {
         }
   
         createProduct(productsFilter);
+
+        urlParams.set('filter', filterClass);
+        updateUrl();
       });
     });
 }
@@ -29,6 +32,9 @@ export function filterProductPrice() {
     inpRange.addEventListener('input', () => {
       let productsFilter = newProducts.filter((item) => parseFloat(item.price) <= parseFloat(inpRange.value));
       createProduct(productsFilter);
+
+      urlParams.set('price', inpRange.value);
+      updateUrl();
     });
 }
 
@@ -42,5 +48,14 @@ export function filterProductName () {
       return product.topic.toLowerCase().includes(searchValue)
     })
     createProduct(productsFilter)
+    urlParams.set('search', searchValue);
+    updateUrl();
   })
 }
+
+const urlParams = new URLSearchParams(window.location.search);
+function updateUrl() {
+  const newUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+  window.history.replaceState(null, '', newUrl);
+}
+
