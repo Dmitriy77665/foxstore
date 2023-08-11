@@ -73,7 +73,7 @@ export function createProduct(productsItem) {
                         <p>${product.name}</p>
                         <span class="price">$${product.price}</span>
                         <img src="/img/catalog/star.png" alt="">
-                        <span>${product.topic}</span>
+                        <span data-filter=${product.topic}>${product.topic}</span>
                     </li>
                 </ul>`;
       });

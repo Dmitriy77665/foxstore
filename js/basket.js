@@ -5,10 +5,11 @@ const closeBasket = document.querySelector('.close_basket');
 
 openBasket.addEventListener('click', () => {
     body.classList.add('active');
-  });
-  closeBasket.addEventListener('click', () => {
+});
+
+closeBasket.addEventListener('click', () => {
     body.classList.remove('active');
-  });
+});
 
 function createBasket(item) {
   const listCard = document.querySelector('.list_card');
@@ -46,23 +47,36 @@ function createBasket(item) {
 
 let basket = [];
 
+function saveBasketToLocalStorage() {
+    localStorage.setItem('basket', JSON.stringify(basket));
+}
+
+function loadBasketFromLocalStorage() {
+    const savedBasket = localStorage.getItem('basket');
+    if (savedBasket) {
+        basket = JSON.parse(savedBasket);
+        createBasket(basket);
+        calcBasketPrice();
+    }
+}
+
 export function addToBasket(product) {
-  const productIndex = basket.findIndex(item => item.id === product.id);
-  
-  if (productIndex !== -1) {
-      basket[productIndex].quantity += 1;
+  const existingProduct = basket.find(item => item.id === product.id);
+
+  if (existingProduct) {
+      existingProduct.quantity += 1;
   } else {
       basket.push({ ...product, quantity: 1 });
   }
-  
+
+  saveBasketToLocalStorage();
   createBasket(basket);
   calcBasketPrice();
 }
 
-
 window.addEventListener('click', (event) => {
-    let counter;
-    let cards;
+  let counter;
+  let cards;
     if (event.target.dataset.action === 'plus' || event.target.dataset.action === 'minus') {
       cards = event.target.closest('.cards');
       counter = cards.querySelector(`[data-counter="${event.target.closest('.amount_item').querySelector('.count').dataset.counter}"]`)
@@ -80,23 +94,34 @@ window.addEventListener('click', (event) => {
   
       counter.innerText = newCount;
       priceEl.textContent = (productPrice * newCount).toFixed(2);
-  
+      saveBasketToLocalStorage()
+      
     } else if (event.target.dataset.action === 'remove') {
-      cards = event.target.closest('.cards');
-      cards.remove();
+        const card = event.target.closest('.cards');
+        const productId = card.querySelector('.count').dataset.counter;
+
+        basket = basket.filter(item => item.id !== productId);
+        saveBasketToLocalStorage();
+
+        card.remove();
+        calcBasketPrice();
+        saveBasketToLocalStorage()
     }
-    calcBasketPrice();
+    saveBasketToLocalStorage()
 });
 
+window.addEventListener('load', () => {
+    loadBasketFromLocalStorage();
+});
 function calcBasketPrice() {
-    const cards = document.querySelectorAll('.cards');
-    let totalPrice = 0;
-    cards.forEach(function (item) {
-      const amountEl = item.querySelector('[data-counter]');
-      const priceEl = item.querySelector('.price_currency');
-      const currentPrice = parseFloat(amountEl.innerText) * parseFloat(priceEl.innerText);
-      totalPrice += currentPrice;
-    });
-    const totalSpan = document.querySelector('.total');
-    totalSpan.textContent = totalPrice
+  const cards = document.querySelectorAll('.cards');
+  let totalPrice = 0;
+  cards.forEach(function (item) {
+    const amountEl = item.querySelector('[data-counter]');
+    const priceEl = item.querySelector('.price_currency');
+    const currentPrice = parseFloat(amountEl.innerText) * parseFloat(priceEl.innerText);
+    totalPrice += currentPrice;
+  });
+  const totalSpan = document.querySelector('.total');
+  totalSpan.textContent = totalPrice
 }

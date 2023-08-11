@@ -31,3 +31,16 @@ export function filterProductPrice() {
       createProduct(productsFilter);
     });
 }
+
+export function filterProductName () {
+  const searchInp = document.getElementById('search')
+  searchInp.addEventListener('input', (event) => {
+    event.preventDefault()
+
+    let searchValue = searchInp.value.toLowerCase()
+    let productsFilter = newProducts.filter((product) => {
+      return product.topic.toLowerCase().includes(searchValue)
+    })
+    createProduct(productsFilter)
+  })
+}
