@@ -59,3 +59,28 @@ function updateUrl() {
   window.history.replaceState(null, '', newUrl);
 }
 
+window.addEventListener('load', () => {
+  const filterParam = urlParams.get('filter');
+  const priceParam = urlParams.get('price');
+  const searchParam = urlParams.get('search');
+
+  if (filterParam) {
+    const filterBtn = document.querySelector(`[data-filter="${filterParam}"]`);
+    if (filterBtn) {
+      filterBtn.click();
+    }
+  }
+
+  if (priceParam) {
+    const inpRange = document.querySelector('.slide');
+    inpRange.value = priceParam;
+    inpRange.dispatchEvent(new Event('input'));
+  }
+
+  if (searchParam) {
+    const searchInp = document.getElementById('search');
+    searchInp.value = searchParam;
+    searchInp.dispatchEvent(new Event('input'));
+  }
+});
+
