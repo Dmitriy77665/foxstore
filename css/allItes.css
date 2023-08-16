@@ -32,12 +32,6 @@ li {
 .nav_icons img {
     padding-left: 20px;
 }
-.quantity {
-    color: #fff;
-    background-color: red;
-    border-radius: 50%;
-    padding: 1px 8px;
-}
 .header {
     background-color: rgba(230, 230, 230, 1);
     text-align: center;
@@ -187,6 +181,7 @@ h1 {
     text-align: center;
 }
 .catalog {
+    opacity: 1;
     display: flex;
     gap: 40px 100px;
     flex-wrap: wrap;
@@ -278,3 +273,16 @@ h1 {
     justify-content: space-around;
     margin-bottom: 20px;
 }
+
+.catalog {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Установка начального положения для футера */
+.initial-hidden {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+  

@@ -61,7 +61,7 @@ export const products = [
     },
 ]
 
-export function createProduct(productsItem) {
+export async function createProduct(productsItem) {
     let card = '';
   
     function createProductCard(arr) {
